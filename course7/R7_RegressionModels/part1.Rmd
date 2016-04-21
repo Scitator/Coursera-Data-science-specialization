@@ -1,0 +1,145 @@
+---
+output: pdf_document
+---
+Assignment: Regression Models Course Project
+==========================================
+
+# Motor Trend
+
+## Overview  
+
+Work for Motor Trend, a magazine about the automobile industry. Looking at a data set of a collection of cars, MT are interested in exploring the relationship between a set of variables and miles per gallon (MPG) (outcome). MT are particularly interested in the following two questions:
+1. Is an automatic or manual transmission better for MPG?
+2. Quantify the MPG difference between automatic and manual transmissions.
+
+## Requirements & setting
+
+```{r}
+set.seed(42)
+library(ggplot2)
+```
+
+## Preprocessing
+
+Let's load required data and transform certain variables into factors.
+
+```{r}
+data(mtcars)
+mtcars$cyl <- as.factor(mtcars$cyl)
+mtcars$vs <- as.factor(mtcars$vs)
+mtcars$gear <- factor(mtcars$gear)
+mtcars$carb <- factor(mtcars$carb)
+mtcars$am   <- factor(mtcars$am,labels=c("Automatic","Manual"))
+```
+
+### Statistical Inference
+
+T-test on the two subsets of mpg data: manual and automatic transmission assuming that the transmission data has a normal distribution and tests the null hypothesis that they come from the same distribution. 
+
+```{r}
+t.test(mtcars$mpg ~ mtcars$am)
+```  
+
+Based on the t-test results, we reject the null hypothesis that the mpg distributions for manual and automatic transmissions are the same.
+
+### Regression Analysis
+
+#### First model (all to mpg)
+
+First model includes all variables as predictors of mpg. 
+
+```{r, results='hide'}
+allModel <- lm(mpg ~ ., data = mtcars)
+summary(allModel) # results hidden
+```  
+
+Residual standard error - 2.833 and 15 degrees of freedom. Adjusted R-squared value - 0.779, which means that the model can explain about 78% of the variance of the MPG variable. None of the coefficients are significant at 0.05 significant level.
+
+#### Best model
+
+Then use first model in order to select significant predictors for the best model. The step function will perform this selection by calling lm repeatedly to build multiple regression models and select the best variables from them using both forward selection and backward elimination methods using AIC algorithm. This ensures that we have included useful variables while omitting ones that do not contribute significantly to predicting mpg.
+
+```{r, results='hide'}
+bestModel <- step(allModel, direction = "both") #result hidden
+```  
+
+```{r}
+summary(bestModel)
+```  
+
+The best model obtained from the above computations shows that variables, cyl, wt and hp as confounders and am as the independent variable. Details of the model are depicted below.
+
+Summory:
+Adjusted R-squared value - 0.84, which means that the model can explain about 84% (which is the maximum obtained considering all combinations of variables) of the variance of the MPG variable. 
+
+#### Residual Plots
+
+The residual plots (in the appendix) of our regression model along with computation of regression diagnostics for our liner model give the following results:
+
+1. The points in the Residuals vs. Fitted plot are randomly scattered on the plot that verifies the independence condition;
+
+2. The Normal Q-Q plot consists of the points which mostly fall on the line indicating that the residuals are normally distributed;
+
+3. The Scale-Location plot consists of points scattered in a constant band pattern, indicating constant variance.
+
+
+#### Model comparison
+
+Now let's compare the simple model with only am as the predictor variable and the best model which we obtained above containing confounder variables.
+
+```{r, results='hide'}
+simpleModel <- lm(mpg ~ am, data = mtcars)
+summary(simpleModel)
+```  
+
+```{r}
+anova(simpleModel, bestModel)
+```  
+
+Looking at the above results, the p-value obtained is highly significant and we reject the null hypothesis that the confounder variables cyl, hp and wt don’t contribute to the accuracy of the model.
+
+#### Conclusion
+
+Based on the observations from our best model, we can conclude the following,
+
+- cars with Manual transmission get more miles per gallon mpg compared to cars with Automatic transmission. (1.8 adjusted by hp, cyl, and wt);
+
+- mpg will decrease by 2.5 (adjusted by hp, cyl, and am) for every 1000 lb increase in wt;
+
+- mpg decreases negligibly with increase of hp;
+
+- if number of cylinders, cyl increases from 4 to 6 and 8, mpg will decrease by a factor of 3 and 2.2 respectively (adjusted by hp, wt, and am). 
+
+### Extra plots - appendix
+
+#### Residual plots
+
+```{r, echo=FALSE}
+par(mfrow = c(2, 2))
+plot(bestModel)
+```  
+
+```{r, echo=FALSE}
+e <- resid(bestModel)
+x <- mtcars$wt
+plot(x, e, xlab = "Vehicle weight", ylab = "Residuals (mgp)", main = "Residuals plot of our best model")
+abline(h = 0, lwd = 2)
+for (i in 1:length(e))
+  lines(c(x[i], x[i]), c(e[i], 0), col = "red", lwd = 2)
+```
+
+```{r, echo=FALSE}
+par(mfrow = c(1, 1))
+boxplot(mpg ~ am, 
+        data = mtcars, 
+        col = (c("red","blue")), 
+        ylab = "Miles Per Gallon", 
+        xlab = "Transmission Type", 
+        main="Boxplot of MPG by Transmission type")
+```  
+
+#### Pair plots for mtcars dataset
+
+```{r, echo=FALSE}
+pairs(mpg ~ ., data = mtcars)
+```  

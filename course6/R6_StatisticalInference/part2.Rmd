@@ -1,0 +1,94 @@
+---
+output: pdf_document
+---
+Assignment: Statistical Inference Course Project
+==========================================
+
+## Part 2: ToothGrowth data analyze.
+
+### Overview  
+
+Now in the second portion of the class, we're going to analyze the ToothGrowth data in the R datasets package.
+
+### TodoList
+
+1. Load the ToothGrowth data and perform some basic exploratory data analyses
+2. Provide a basic summary of the data.
+3. Use confidence intervals and/or hypothesis tests to compare tooth growth by supp and dose. 
+4. State your conclusions and the assumptions needed for your conclusions.
+
+### Part 0 - Load the ToothGrowth data and perform some basic exploratory data analyses
+
+```{r}
+set.seed(42)
+library(ggplot2)
+library(datasets)
+data <- ToothGrowth
+```
+
+Some usefull plots
+
+```{r}
+ggplot(data = data, aes(x = dose, y = len, fill = supp))  +
+  geom_bar(stat = "identity") +
+  facet_grid(. ~ supp) +
+  xlab("Dose in miligrams") +
+  ylab("Tooth length") +
+  guides(fill = guide_legend(title = "Supplement type"))
+```
+
+```{r}
+ggplot(data = data, aes(x = as.factor(dose), y = len, fill = dose)) +
+  geom_boxplot(aes(fill = dose)) +
+  xlab("Dose in miligrams") +
+  ylab("Tooth length") +
+  guides(fill = guide_legend(title = "Dose"))
+```
+
+```{r}
+ggplot(data = data, aes(x = supp, y = len, fill = dose))  +
+  geom_boxplot(aes(fill = supp)) +
+  xlab("Supplement type") +
+  ylab("Tooth length") +
+  guides(fill = guide_legend(title = "Supplement type"))
+```
+
+#### Part 1 - Provide a basic summary of the data
+
+```{r}
+summary(data)
+```  
+
+```{r}
+str(data)
+```  
+
+```{r}
+table(data$dose, data$supp)
+```  
+
+
+
+#### Part 2 - Use confidence intervals and/or hypothesis tests to compare tooth growth by supp and dose.
+
+Since the sample size is small, let's use T distribution.
+
+```{r}
+t.test(len ~ supp, data = data)
+```  
+
+Null hypothesis can not be rejected as confindence intervals contain zero and p-value is bigger than the 5% significance level.
+
+
+Let's also compare the differences between the the different dosis level, since bigger dosis may yield contradicting evidence.
+
+```{r}
+t.test(data$len, data$dose)
+```  
+
+Comparing the difference between the two supplements yields convincing evidence to reject the null hypothesis, since the p-value aproximates to 0, and is thus substancially smaller in comparison to the significance level.
+
+#### Part 3 - State your conclusions and the assumptions needed for your conclusions.
+
+1. There is no convincing evidence that there is a difference between the two type of supplements based on the existing datasets and T statistics.
+2. There is convincing evidence that there is a difference between the dosis level, and the growth.
