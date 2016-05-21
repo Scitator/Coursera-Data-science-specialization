@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "library(shiny)\n\n# Define UI for dataset viewer application\nshinyUI(pageWithSidebar(\n  \n  # Application title\n  headerPanel(\"Reactive Datasets\"),\n  \n  # Sidebar with controls to provide a caption, select a dataset, and \n  # specify the number of observations to view. Note that changes made\n  # to the caption in the textInput control are updated in the output\n  # area immediately as you type\n  sidebarPanel(\n    textInput(\"caption\", \"Caption:\", \"Data Summary\"),\n    \n    selectInput(\"dataset\", \"Choose a dataset:\", \n                choices = c(\"rock\", \"pressure\", \"cars\")),\n    \n    numericInput(\"obs\", \"Number of observations to view:\", 10)\n  ),\n  \n  \n  # Show the caption, a summary of the dataset and an HTML table with\n  # the requested number of observations\n  mainPanel(\n    h3(textOutput(\"caption\")), \n    \n    verbatimTextOutput(\"summary\"), \n    \n    plotOutput(\"plot\"),\n    \n    tableOutput(\"view\")\n    \n    \n  )\n))",
+    "created" : 1463571407322.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2248073175",
+    "id" : "C27C3672",
+    "lastKnownWriteTime" : 1463650313,
+    "last_content_update" : 1463650313104,
+    "path" : "~/Documents/Projects/R/Shiny/CourseProject/ui.R",
+    "project_path" : "ui.R",
+    "properties" : {
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "Shiny Application and Reproducible Pitch: Reactive Summary\n========================================================\nauthor: Kolesnikov Sergey\ndate: 19.05.16\nautosize: true\n\nCourse Project\n========================================================\n\n- This is the final presentation for the Course Project of the “Developing data products” course\n- This course is part of the “Data Science specialization”\n- The project consists in two activities:\n  - Create a Shiny application\n  - Create a presentation in Slidify or Rstudio Presenter to pitch for the application.\n\nReactive Summary: Datasets\n========================================================\n\n- For this assignment, we used the cars, rock and pressure datasets from datasets package.\n\n- Some sample information about the cars's summary:\n\n```{r}\nsummary(cars)\n```\n\nReactive Summary: Functionality\n========================================================\n\nWhen the application is launched, summary, scatter plot and head observations is shown for rock dataset.\n\nThe default number of observations used is set to 10, and the default dataset is set to rock.\n\nUse the sliders on the left pane to modify the number of observations and dataset of interest.\n\nThe summary, plot and table would be automatically updated.\n\nReactive Summary: Application\n========================================================\n\n- The application can be found in https://scitator.shinyapps.io/CourseProject-ReactiveSummary/\n- We can see the summary for rock dataset:\n\n![alt](./presentation-figure/demo.png)\n",
+    "created" : 1463643038710.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2358262809",
+    "id" : "8EB1C50C",
+    "lastKnownWriteTime" : 1463667043,
+    "last_content_update" : 1463667043210,
+    "path" : "~/Documents/Projects/R/Shiny/CoursePresentation/presentation.Rpres",
+    "project_path" : null,
+    "properties" : {
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_presentation"
+}
